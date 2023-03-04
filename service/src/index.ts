@@ -34,6 +34,7 @@ router.post('/chat-process', async (req, res) => {
     let firstChunk = true
     await chatReplyProcess(prompt, options, (chat: ChatMessage) => {
       res.write(firstChunk ? JSON.stringify(chat) : `\n${JSON.stringify(chat)}`)
+      global.console.log()
       firstChunk = false
     })
   }

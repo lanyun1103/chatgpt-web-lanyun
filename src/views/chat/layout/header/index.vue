@@ -42,7 +42,7 @@ function onScrollToBottom() {
         class="flex-1 px-4 overflow-hidden text-center cursor-pointer select-none text-ellipsis whitespace-nowrap"
         @dblclick="onScrollToTop"
       >
-        {{ currentChatHistory?.title ?? '' }}
+        {{ currentChatHistory?.title ?? 'Magic Pencil' }}
       </h1>
       <button
         class="flex items-center justify-center w-11 h-11"
