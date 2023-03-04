@@ -22,6 +22,6 @@ const avatar = computed(() => userStore.userInfo.avatar)
     <NAvatar v-else round :src="defaultAvatar" />
   </template>
   <span v-else class="text-[28px] dark:text-white">
-    <img src="https://i.imgur.com/pY0BR4n.png" alt="avatar">
+    <img src="https://i.328888.xyz/2023/03/04/Gcn63.png" alt="avatar">
   </span>
 </template>

@@ -15,7 +15,7 @@ export interface UserState {
 export function defaultSetting(): UserState {
   return {
     userInfo: {
-      avatar: 'https://i.imgur.com/pY0BR4n.png',
+      avatar: 'https://i.328888.xyz/2023/03/04/Gcn63.png',
       name: 'MagicPencil',
       description: '',
     },
