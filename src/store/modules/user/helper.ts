@@ -16,8 +16,8 @@ export function defaultSetting(): UserState {
   return {
     userInfo: {
       avatar: 'https://i.328888.xyz/2023/03/04/Gcn63.png',
-      name: 'MagicPencil',
-      description: '',
+      name: '点击赞赏 MagicPencil',
+      description: '感觉好用吗？有你的赞赏，我们会竭尽全力维持站点运行。',
     },
   }
 }

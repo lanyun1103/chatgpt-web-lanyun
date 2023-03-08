@@ -25,10 +25,10 @@ const userInfo = computed(() => userStore.userInfo)
         <NAvatar size="large" round :src="defaultAvatar" />
       </template>
     </div>
-    <div class="ml-2">
-      <h2 class="font-bold text-md">
+    <div class="ml-2" style="width: 120px">
+      <a class="font-bold text-md" style="color: gold" href="https://i.328888.xyz/2023/03/09/ScyjH.jpeg">
         {{ userInfo.name ?? 'ChenZhaoYu' }}
-      </h2>
+      </a>
       <p class="text-xs text-gray-500">
         <span
           v-if="isString(userInfo.description) && userInfo.description !== ''"

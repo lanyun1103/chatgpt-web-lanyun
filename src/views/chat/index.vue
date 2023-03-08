@@ -360,7 +360,7 @@ onUnmounted(() => {
           <template v-if="!dataSources.length">
             <div class="flex items-center justify-center mt-4 text-center text-neutral-300">
               <SvgIcon icon="ri:bubble-chart-fill" class="mr-2 text-3xl" />
-              <span>tips: 当前使用人数过多，导致站点经费不足/(ㄒoㄒ)/~~目前限制对话长度最长为512 token</span>
+              <span>tips: 当前使用人数过多，导致站点经费不足/(ㄒoㄒ)/~~仅3月7日一天耗费38$。目前限制对话长度最长为512 token。</span>
             </div>
           </template>
           <template v-else>
