@@ -38,7 +38,7 @@ onMounted(() => {
       console.log('Verified user: ', response.data)
     }).catch((error) => {
       console.error('Error verifying token: ', error)
-      // router.push('/')
+      router.push('/')
     })
   }
 })
