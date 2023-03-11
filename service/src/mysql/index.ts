@@ -17,7 +17,7 @@ export class Database {
     this.connection = mysql.createConnection({
       host: 'localhost',
       user: 'root',
-      password: 'lollol1103',
+      password: 'Lollol110302.',
       database: 'chatgptweb',
     })
     this.connection.connect((error) => {
