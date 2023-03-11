@@ -1,9 +1,13 @@
+import * as console from 'console'
 import express from 'express'
 import type { ChatContext, ChatMessage } from './chatgpt'
 import { chatConfig, chatReply, chatReplyProcess } from './chatgpt'
+import { Auth } from './mysql'
+import type { User } from './mysql'
 
 const app = express()
 const router = express.Router()
+const auth = new Auth()
 
 app.use(express.static('public'))
 app.use(express.json())
@@ -54,6 +58,57 @@ router.post('/config', async (req, res) => {
   }
   catch (error) {
     res.send(error)
+  }
+})
+router.post('/register', (req, res) => {
+  const user = req.body as User
+  console.log(user)
+  if (user == null || user.username == null || user.password == null || user.password) {
+    res.status(500).send({ error: '请输入信息' })
+    return
+  }
+  auth.register(user, (error, userId) => {
+    if (error) {
+      console.error('Error registering user: ', error)
+      res.status(500).send({ error: 'Internal server error' })
+      return
+    }
+    console.log('Registered user with ID: ', userId)
+    res.status(200).send({ message: 'User registered successfully' })
+  })
+})
+
+router.post('/login', (req, res) => {
+  const { username, password } = req.body
+  if (username === '' || password === '') {
+    res.status(500).send({ error: '请输入信息' })
+    return
+  }
+  auth.login(username, password, (error, token, pFlag) => {
+    if (error) {
+      console.error('Error logging in user: ', error)
+      res.status(500).send({ error: 'Internal server error' })
+      return
+    }
+    if (!token) {
+      res.status(401).send({ error: 'Invalid username or password' })
+      return
+    }
+    console.log('Logged in user with token: ', token)
+    res.status(200).send({ token, pFlag })
+  })
+})
+
+router.get('/verify', (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1]
+  const userId = auth.verifyToken(token)
+  if (userId) {
+    console.log('Verified user with ID: ', userId)
+    res.status(200).send({ userId })
+  }
+  else {
+    console.log('Invalid token!')
+    res.status(401).send({ error: 'Invalid token' })
   }
 })
 

@@ -8,6 +8,9 @@ import { copyText } from '@/utils/format'
 import { useIconRender } from '@/hooks/useIconRender'
 import { t } from '@/locales'
 
+const props = defineProps<Props>()
+const emit = defineEmits<Emit>()
+
 interface Props {
   dateTime?: string
   text?: string
@@ -20,10 +23,6 @@ interface Emit {
   (ev: 'regenerate'): void
   (ev: 'delete'): void
 }
-
-const props = defineProps<Props>()
-
-const emit = defineEmits<Emit>()
 
 const { iconRender } = useIconRender()
 

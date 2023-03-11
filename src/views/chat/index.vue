@@ -28,6 +28,7 @@ const { uuid } = route.params as { uuid: string }
 
 const dataSources = computed(() => chatStore.getChatByUuid(+uuid))
 const conversationList = computed(() => dataSources.value.filter(item => (!item.inversion && !item.error)))
+let times = parseInt(localStorage.getItem('times') || '', 10) || 0
 
 const prompt = ref<string>('')
 const loading = ref<boolean>(false)
@@ -37,6 +38,16 @@ function handleSubmit() {
 }
 
 async function onConversation() {
+  if (times >= 10 && localStorage.getItem('pFlag') !== '1') {
+    alert('由于当前运维成本过高，每人每天最多可提问 10 个问题')
+    return
+  }
+
+  // 将times值加1
+  times++
+
+  // 将新的times值保存到localStorage中
+  localStorage.setItem('times', `${times}`)
   const message = prompt.value
 
   if (loading.value)
