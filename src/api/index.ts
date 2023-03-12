@@ -1,5 +1,5 @@
 import type { AxiosProgressEvent, GenericAbortSignal } from 'axios'
-import { post } from '@/utils/request'
+import { get, post } from '@/utils/request'
 
 export function fetchChatAPI<T = any>(
   prompt: string,
@@ -32,4 +32,56 @@ export function fetchChatAPIProcess<T = any>(
     signal: params.signal,
     onDownloadProgress: params.onDownloadProgress,
   })
+}
+
+export function fetchVerify<T = any>(
+  params: {
+    token: string
+  },
+) {
+  const auth = `Bearer ${params.token}`
+  return get<T>({
+    url: '/verify',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': auth,
+    },
+  })
+}
+
+export function fetchRegister<T = any>(
+  params: {
+    username: string
+    password: string
+    email: string
+  },
+) {
+  return post<T>({
+    url: '/register',
+    data: { username: params.username, password: params.password, email: params.email },
+  })
+}
+
+export function fetchLogin<T = any>(
+  params: {
+    username: string
+    password: string
+  },
+) {
+  try {
+    const response = post<T>({
+      url: '/login',
+      data: { username: params.username, password: params.password },
+    })
+    // console.log(response)
+    // return response
+  }
+  catch (error) {
+    console.error('Error logging in user1: ', error)
+    throw error
+  }
+  // return post<T>({
+  //   url: '/login',
+  //   data: { username: params.username, password: params.password },
+  // })
 }

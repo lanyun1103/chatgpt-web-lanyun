@@ -4,6 +4,8 @@ import { ref } from 'vue'
 import type { FormRules } from 'naive-ui'
 import { NAlert, NButton, NForm, NFormItem, NInput } from 'naive-ui'
 import axios from 'axios'
+import type { LoginResModel } from '../../../../service/src/types'
+import { fetchLogin, fetchRegister } from '@/api'
 
 const router = useRouter()
 const api = axios.create({
@@ -40,45 +42,47 @@ const registerRules: FormRules = {
     { required: true, message: 'Please confirm your password', trigger: 'blur' },
   ],
 }
-//
-// const showError = (message) => {
-//   // 显示错误提示框
-//   loginErrorMessage.value = message
-//   registerErrorMessage.value = message
-// }
 const login = () => {
-  api.post('/login', { username: loginForm.value.username, password: loginForm.value.password }).then((response) => {
-    // console.log('Logged in user: ', response.data)
-    localStorage.setItem('token', response.data.token)
+  fetchLogin<LoginResModel>({
+    username: loginForm.value.username,
+    password: loginForm.value.password,
+  }).then((response) => {
+    alert('登录成功')
+    localStorage.setItem('token', response.data.token || '')
     localStorage.setItem('pFlag', `${response.data.pFlag}`)
     router.push('/chat')
+    // eslint-disable-next-line n/handle-callback-err
   }).catch((error) => {
-    console.error('Error logging in user: ', error)
-    alert('Login failed')
+    alert('登录失败')
   })
 }
 
 const register = () => {
   // console.log(registerForm.value.username)
-  api.post('/register', {
+  fetchRegister<string>({
     username: registerForm.value.username,
     password: registerForm.value.password,
     email: registerForm.value.email,
   }).then((response) => {
-    // console.log('Registered user: ', response.data)
-    alert('User registered successfully')
+    alert('注册成功，请登录')
   }).catch((error) => {
-    console.error('Error registering user: ', error)
-    alert('Registration failed')
+    console.error('注册失败 ', error)
+    alert(`注册失败: ${error}`)
   })
 }
 </script>
 
 <template>
   <div>
-    <div class="login-form">
+    <div class="login-form" style="padding-top: 40px; border-color: black">
+      <img style="height: 200px; width: 400px" src="https://lanyun1103-1300568527.cos.ap-nanjing.myqcloud.com/pic/1.png">
       <NSpace>
-        <h1>登录页面</h1>
+        <span>目前OPENAI API已使用费用 80$，理论上已经开启了每人只可以回答十个问题的限制<br></span>
+        <span>如果希望每日回答无限次数，每月15元让我回回本就可以了/(ㄒoㄒ)/~~<br></span>
+        <span>连夜赶出来的登录功能，还没有校验，且用且珍惜，已经打赏过的用户名带上本人姓名最后一个字即可<br></span>
+        <NText strong>
+          登录页面
+        </NText>
         <NForm ref="loginForm" :model="loginForm" :rules="loginRules">
           <NFormItem label="Username" prop="username">
             <NInput v-model:value="loginForm.username" placeholder="请输入用户名哦~" />
@@ -87,7 +91,7 @@ const register = () => {
             <NInput v-model:value="loginForm.password" type="password" placeholder="请输入密码哦~" />
           </NFormItem>
           <NFormItem>
-            <NButton class="page-button" type="primary" @click="login">
+            <NButton class="page-button" type="primary" style="margin-top: -50px" @click="login">
               Login
             </NButton>
           </NFormItem>
@@ -100,7 +104,7 @@ const register = () => {
 
     <div class="login-form">
       <NSpace>
-        <h1>还没有账号？</h1>
+        <NText>还没有账号？</NText>
         <NForm ref="registerForm" :model="registerForm" :rules="registerRules">
           <NFormItem label="Username" prop="username">
             <NInput v-model:value="registerForm.username" placeholder="输入你的用户名" />
@@ -115,7 +119,7 @@ const register = () => {
             <NInput v-model:value="registerForm.confirmPassword" type="password" placeholder="确认密码" />
           </NFormItem>
           <NFormItem>
-            <NButton class="page-button" type="primary" @click="register">
+            <NButton class="page-button" type="primary" style="margin-top: -50px" @click="register">
               Register
             </NButton>
           </NFormItem>
@@ -133,7 +137,7 @@ const register = () => {
     display: flex;
     justify-content: center;
     align-items: center;
-    text-align: center
+    text-align: center;
 }
 .page-button{
     margin-left: 50px;

@@ -63,8 +63,8 @@ router.post('/config', async (req, res) => {
 router.post('/register', (req, res) => {
   const user = req.body as User
   console.log(user)
-  if (user == null || user.username == null || user.password == null || user.password) {
-    res.status(500).send({ error: '请输入信息' })
+  if (user == null || user.username == null || user.password == null) {
+    res.status(500).send({ error: '您输入的信息有无，请检查密码是否大于6位' })
     return
   }
   auth.register(user, (error, userId) => {
@@ -74,11 +74,11 @@ router.post('/register', (req, res) => {
       return
     }
     console.log('Registered user with ID: ', userId)
-    res.status(200).send({ message: 'User registered successfully' })
+    res.status(200).send({ message: 'User registered successfully', status: 'Success' })
   })
 })
 
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
   const { username, password } = req.body
   if (username === '' || password === '') {
     res.status(500).send({ error: '请输入信息' })
@@ -91,11 +91,12 @@ router.post('/login', (req, res) => {
       return
     }
     if (!token) {
+      console.error(`Not found: ${username}, ${password}`)
       res.status(401).send({ error: 'Invalid username or password' })
       return
     }
     console.log('Logged in user with token: ', token)
-    res.status(200).send({ token, pFlag })
+    res.status(200).send({ data: { token, pFlag }, status: 'Success' })
   })
 })
 
@@ -104,7 +105,7 @@ router.get('/verify', (req, res) => {
   const userId = auth.verifyToken(token)
   if (userId) {
     console.log('Verified user with ID: ', userId)
-    res.status(200).send({ userId })
+    res.status(200).send({ userId, status: 'Success' })
   }
   else {
     console.log('Invalid token!')

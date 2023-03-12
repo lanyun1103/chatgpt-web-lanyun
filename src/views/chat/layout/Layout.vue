@@ -7,6 +7,7 @@ import Sider from './sider/index.vue'
 import Header from './header/index.vue'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { useAppStore, useChatStore } from '@/store'
+import { fetchVerify } from '@/api'
 
 const router = useRouter()
 const appStore = useAppStore()
@@ -34,10 +35,11 @@ onMounted(() => {
     router.push('/')
   }
   else {
-    api.get('/verify', { headers: { Authorization: `Bearer ${token}` } }).then((response) => {
+    fetchVerify<string>({
+      token,
+    }).then(() => {
       // console.log('Verified user: ', response.data)
-    }).catch((error) => {
-      console.error('Error verifying token: ', error)
+    }).catch(() => {
       router.push('/')
     })
   }

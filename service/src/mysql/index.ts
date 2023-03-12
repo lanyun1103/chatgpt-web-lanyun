@@ -17,20 +17,22 @@ export class Database {
     this.connection = mysql.createConnection({
       host: 'localhost',
       user: 'root',
-      password: 'Lollol110302.',
-      database: 'chatgptweb',
+      password: '123456',
+      database: 'chatgpt-web',
+      port: 4000,
+      // password: 'Lollol110302.',
+      // database: 'chatgptweb',
     })
     this.connection.connect((error) => {
-      if (error) {
+      if (error)
         console.error('Error connecting to MySQL database: ', error)
-        return
-      }
-      console.log('Connected to MySQL database!')
+
+      // console.log('Connected to MySQL database!')
     })
   }
 
-  public query(sql: string, values: any[], callback: Function) {
-    this.connection.query(sql, values, (error, results, fields) => {
+  public query(sql: string, values: string[], callback: Function) {
+    this.connection.query(sql, values, (error, results) => {
       if (error) {
         console.error('Error executing query: ', error)
         callback(error, null)
@@ -42,11 +44,10 @@ export class Database {
 
   public close() {
     this.connection.end((error) => {
-      if (error) {
+      if (error)
         console.error('Error closing MySQL database connection: ', error)
-        return
-      }
-      console.log('Closed MySQL database connection!')
+
+      // console.log('Closed MySQL database connection!')
     })
   }
 }
@@ -61,26 +62,41 @@ export class Auth {
   }
 
   public register(user: User, callback: Function) {
-    bcrypt.hash(user.password, this.saltRounds, (error, hash) => {
+    const checkDuplicateSql = 'SELECT COUNT(*) AS count FROM users WHERE username = ?'
+    const checkDuplicateValues = [user.username]
+    this.db.query(checkDuplicateSql, checkDuplicateValues, (error, results) => {
       if (error) {
-        console.error('Error hashing password: ', error)
+        console.error('Error checking duplicate username: ', error)
         callback(error, null)
         return
       }
-      const sql = 'INSERT INTO users SET ?'
-      const values = {
-        username: user.username,
-        password: hash,
-        email: user.email,
+      const count = results[0].count
+      if (count > 0) {
+        const duplicateError = new Error('Duplicate username')
+        callback(duplicateError, null)
+        return
       }
-      this.db.query(sql, values, (error, results) => {
+      bcrypt.hash(user.password, this.saltRounds, (error, hash) => {
         if (error) {
-          console.error('Error registering user: ', error)
+          console.error('Error hashing password: ', error)
           callback(error, null)
           return
         }
-        console.log('Registered user: ', user)
-        callback(null, results.insertId)
+        const sql = 'INSERT INTO users SET ?'
+        const values = {
+          username: user.username,
+          password: hash,
+          email: user.email,
+        }
+        this.db.query(sql, values, (error, results) => {
+          if (error) {
+            console.error('Error registering user: ', error)
+            callback(error, null)
+            return
+          }
+          // console.log('Registered user: ', user)
+          callback(null, results.insertId)
+        })
       })
     })
   }
@@ -95,7 +111,7 @@ export class Auth {
         return
       }
       if (results.length === 0) {
-        console.log('User not found: ', username)
+        // console.log('User not found: ', username)
         callback(null, null, 0)
         return
       }
@@ -107,12 +123,12 @@ export class Auth {
           return
         }
         if (!isMatch) {
-          console.log('Invalid password: ', password)
+          // console.log('Invalid password: ', password)
           callback(null, null, 0)
           return
         }
         const token = jwt.sign({ id: user.id }, this.secretKey)
-        console.log('User logged in: ', user)
+        // console.log('User logged in: ', user)
         if (user.is_premium === 1) {
           callback(null, token, 1)
           return

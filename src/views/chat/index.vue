@@ -39,7 +39,7 @@ function handleSubmit() {
 
 async function onConversation() {
   if (times >= 10 && localStorage.getItem('pFlag') !== '1') {
-    alert('由于当前运维成本过高，每人每天最多可提问 10 个问题')
+    alert('由于当前运维成本过高，每人每天最多可提问 10 个问题，请等待后续会员服务')
     return
   }
 
