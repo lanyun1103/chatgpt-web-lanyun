@@ -15,8 +15,9 @@ export class Database {
 
   constructor() {
     this.connection = mysql.createConnection({
-      host: 'localhost',
+      host: '127.0.0.1',
       user: 'root',
+      port: '3306',
       // password: '123456',
       // database: 'chatgpt-web',
       // port: 4000,
