@@ -69,7 +69,7 @@ export function fetchLogin<T = any>(
   },
 ) {
   try {
-    const response = post<T>({
+    return post<T>({
       url: '/login',
       data: { username: params.username, password: params.password },
     })
@@ -80,8 +80,4 @@ export function fetchLogin<T = any>(
     console.error('Error logging in user1: ', error)
     throw error
   }
-  // return post<T>({
-  //   url: '/login',
-  //   data: { username: params.username, password: params.password },
-  // })
 }

@@ -3,14 +3,10 @@ import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import type { FormRules } from 'naive-ui'
 import { NAlert, NButton, NForm, NFormItem, NInput } from 'naive-ui'
-import axios from 'axios'
 import type { LoginResModel } from '../../../../service/src/types'
 import { fetchLogin, fetchRegister } from '@/api'
 
 const router = useRouter()
-const api = axios.create({
-  baseURL: 'http://localhost:3002', // 将此处的 URL 替换为您的后端 API URL
-})
 
 const loginForm = ref({
   username: '',
@@ -51,9 +47,8 @@ const login = () => {
     localStorage.setItem('token', response.data.token || '')
     localStorage.setItem('pFlag', `${response.data.pFlag}`)
     router.push('/chat')
-    // eslint-disable-next-line n/handle-callback-err
   }).catch((error) => {
-    alert('登录失败')
+    alert(`登录失败：${error}`)
   })
 }
 
