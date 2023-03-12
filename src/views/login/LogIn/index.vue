@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
-import {FormRules, NAlert, NButton, NForm, NFormItem, NInput} from 'naive-ui'
+import type { FormRules } from 'naive-ui'
+import { NAlert, NButton, NForm, NFormItem, NInput } from 'naive-ui'
 import axios from 'axios'
+
 const router = useRouter()
 const api = axios.create({
   baseURL: 'http://localhost:3002', // 将此处的 URL 替换为您的后端 API URL
@@ -44,19 +46,9 @@ const registerRules: FormRules = {
 //   loginErrorMessage.value = message
 //   registerErrorMessage.value = message
 // }
-const login = (e) => {
-  e.preventDefault()
-  loginForm.value?.validate((errors) => {
-    if (!errors) {
-      // message.success('验证成功')
-    }
-    else {
-      console.log(errors)
-      // message.error('验证失败')
-    }
-  })
+const login = () => {
   api.post('/login', { username: loginForm.value.username, password: loginForm.value.password }).then((response) => {
-    console.log('Logged in user: ', response.data)
+    // console.log('Logged in user: ', response.data)
     localStorage.setItem('token', response.data.token)
     localStorage.setItem('pFlag', `${response.data.pFlag}`)
     router.push('/chat')
@@ -66,20 +58,14 @@ const login = (e) => {
   })
 }
 
-const register = (e) => {
-  e.preventDefault()
-  loginForm.value?.validate((errors) => {
-    if (!errors) {
-      console.log('验证成功')
-    }
-    else {
-      console.log(errors)
-      console.log('验证失败')
-    }
-  })
-  console.log(registerForm.value.username)
-  api.post('/register', { username: registerForm.value.username, password: registerForm.value.password, email: registerForm.value.email }).then((response) => {
-    console.log('Registered user: ', response.data)
+const register = () => {
+  // console.log(registerForm.value.username)
+  api.post('/register', {
+    username: registerForm.value.username,
+    password: registerForm.value.password,
+    email: registerForm.value.email,
+  }).then((response) => {
+    // console.log('Registered user: ', response.data)
     alert('User registered successfully')
   }).catch((error) => {
     console.error('Error registering user: ', error)
