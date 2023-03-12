@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
-import { NAlert, NButton, NForm, NFormItem, NInput } from 'naive-ui'
+import {FormRules, NAlert, NButton, NForm, NFormItem, NInput} from 'naive-ui'
 import axios from 'axios'
 const router = useRouter()
 const api = axios.create({
@@ -23,12 +23,12 @@ const registerForm = ref({
 const loginErrorMessage = ref('')
 const registerErrorMessage = ref('')
 
-const loginRules = {
+const loginRules: FormRules = {
   username: [{ required: true, message: 'Please enter your username', trigger: 'blur' }],
   password: [{ required: true, message: 'Please enter your password', trigger: 'blur' }],
 }
 
-const registerRules = {
+const registerRules: FormRules = {
   username: [{ required: true, message: 'Please enter your username', trigger: 'blur' }],
   password: [
     { required: true, message: 'Please enter yourpassword', trigger: 'blur' },
@@ -36,23 +36,14 @@ const registerRules = {
   ],
   confirmPassword: [
     { required: true, message: 'Please confirm your password', trigger: 'blur' },
-    {
-      validator(rule, value, callback) {
-        if (value !== registerForm.value.password)
-          callback(new Error('The two passwords do not match'))
-        else
-          callback()
-      },
-      trigger: 'blur',
-    },
   ],
 }
-
-const showError = (message) => {
-  // 显示错误提示框
-  loginErrorMessage.value = message
-  registerErrorMessage.value = message
-}
+//
+// const showError = (message) => {
+//   // 显示错误提示框
+//   loginErrorMessage.value = message
+//   registerErrorMessage.value = message
+// }
 const login = (e) => {
   e.preventDefault()
   loginForm.value?.validate((errors) => {
