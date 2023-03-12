@@ -29,13 +29,13 @@ const getMobileClass = computed(() => {
 })
 
 onMounted(() => {
-  console.log(token)
+  // console.log(token)
   if (!token) {
-    // router.push('/')
+    router.push('/')
   }
   else {
     api.get('/verify', { headers: { Authorization: `Bearer ${token}` } }).then((response) => {
-      console.log('Verified user: ', response.data)
+      // console.log('Verified user: ', response.data)
     }).catch((error) => {
       console.error('Error verifying token: ', error)
       router.push('/')
