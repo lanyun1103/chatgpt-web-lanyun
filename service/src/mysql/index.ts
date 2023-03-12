@@ -17,11 +17,11 @@ export class Database {
     this.connection = mysql.createConnection({
       host: 'localhost',
       user: 'root',
-      password: '123456',
-      database: 'chatgpt-web',
-      port: 4000,
-      // password: 'Lollol110302.',
-      // database: 'chatgptweb',
+      // password: '123456',
+      // database: 'chatgpt-web',
+      // port: 4000,
+      password: 'Lollol110302.',
+      database: 'chatgptweb',
     })
     this.connection.connect((error) => {
       if (error)
