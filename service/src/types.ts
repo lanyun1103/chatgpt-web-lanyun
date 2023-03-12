@@ -1,5 +1,3 @@
-import type { FetchFn } from 'chatgpt'
-
 export interface ChatContext {
   conversationId?: string
   parentMessageId?: string
@@ -11,7 +9,7 @@ export interface ChatGPTUnofficialProxyAPIOptions {
   model?: string
   debug?: boolean
   headers?: Record<string, string>
-  fetch?: FetchFn
+  // fetch?: FetchFn
 }
 
 export interface ModelConfig {

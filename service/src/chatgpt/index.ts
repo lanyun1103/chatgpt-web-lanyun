@@ -55,9 +55,9 @@ let api: ChatGPTAPI | ChatGPTUnofficialProxyAPI
         hostname: process.env.SOCKS_PROXY_HOST,
         port: process.env.SOCKS_PROXY_PORT,
       })
-      options.fetch = (url, options) => {
-        return fetch(url, { agent, ...options })
-      }
+      // options.fetch = (url, options) => {
+      //   return fetch(url, { agent, ...options })
+      // }
     }
 
     if (process.env.API_REVERSE_PROXY)
