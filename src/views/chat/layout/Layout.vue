@@ -2,7 +2,6 @@
 import { computed, onMounted } from 'vue'
 import { NLayout, NLayoutContent } from 'naive-ui'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
 import Sider from './sider/index.vue'
 import Header from './header/index.vue'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
@@ -12,9 +11,6 @@ import { fetchVerify } from '@/api'
 const router = useRouter()
 const appStore = useAppStore()
 const chatStore = useChatStore()
-const api = axios.create({
-  baseURL: 'http://localhost:3002', // 将此处的 URL 替换为您的后端 API URL
-})
 
 router.replace({ name: 'Chat', params: { uuid: chatStore.active } })
 
