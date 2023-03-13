@@ -28,26 +28,26 @@ const { uuid } = route.params as { uuid: string }
 
 const dataSources = computed(() => chatStore.getChatByUuid(+uuid))
 const conversationList = computed(() => dataSources.value.filter(item => (!item.inversion && !item.error)))
-let times = parseInt(localStorage.getItem('times') || '', 10) || 0
+// let times = parseInt(localStorage.getItem('times') || '', 10) || 0
 
 const prompt = ref<string>('')
 const loading = ref<boolean>(false)
 
 function handleSubmit() {
-  onConversation()
+  // onConversation()
 }
 
 async function onConversation() {
-  if (times >= 10 && localStorage.getItem('pFlag') !== '1') {
-    alert('由于当前运维成本过高，每人每天最多可提问 10 个问题，请等待后续会员服务')
-    return
-  }
+  // if (times >= 10 && localStorage.getItem('pFlag') !== '1') {
+  // alert('由于当前运维成本过高，请等待后续登录服务')
+  // return
+  // }
 
   // 将times值加1
-  times++
+  // times++
 
   // 将新的times值保存到localStorage中
-  localStorage.setItem('times', `${times}`)
+  // localStorage.setItem('times', `${times}`)
   const message = prompt.value
 
   if (loading.value)
