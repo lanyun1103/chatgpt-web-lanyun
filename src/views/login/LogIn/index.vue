@@ -75,7 +75,7 @@ const register = () => {
       <NSpace>
         <span>这段时间一直在用爱发电，目前OPENAI API已使用费用 90$(630RMB)<br></span>
         <span>如果希望每日回答无限次数，每月15元，支付备注姓名，让我回回本就可以了，后续会给用户加入会员/(ㄒoㄒ)/~~<br></span>
-        <span>登录功能暂不可用，网站功能也会暂停两天，等登录功能做好就会上线，后面功能会趋于稳定<br></span>
+        <span>网站功能后面会暂停两天，等登录功能做好就会上线，后面功能会趋于稳定<br></span>
         <span>有问题+wx：w2233233o；qq：4737557；邮箱wangkaiyu1103@gmail.com</span>
         <NText strong>
           登录页面
