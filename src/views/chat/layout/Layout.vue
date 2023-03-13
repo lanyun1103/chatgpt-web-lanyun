@@ -6,7 +6,6 @@ import Sider from './sider/index.vue'
 import Header from './header/index.vue'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { useAppStore, useChatStore } from '@/store'
-import { fetchVerify } from '@/api'
 
 const router = useRouter()
 const appStore = useAppStore()
@@ -26,19 +25,20 @@ const getMobileClass = computed(() => {
 })
 
 onMounted(() => {
+  alert('网站将在2023年3月14日00:00:00开始维护，几天后上线登录功能，有问题联系首页联系方式')
   // console.log(token)
-  if (!token) {
-    router.push('/')
-  }
-  else {
-    fetchVerify<string>({
-      token,
-    }).then(() => {
-      // console.log('Verified user: ', response.data)
-    }).catch(() => {
-      router.push('/')
-    })
-  }
+  // if (!token) {
+  // router.push('/')
+  // }
+  // else {
+  //   fetchVerify<string>({
+  //     token,
+  //   }).then(() => {
+  //     // console.log('Verified user: ', response.data)
+  //   }).catch(() => {
+  //     router.push('/')
+  //   })
+  // }
 })
 
 const getContainerClass = computed(() => {

@@ -2,7 +2,8 @@ import type { RouteRecordRaw } from 'vue-router'
 import { createRouter, createWebHashHistory } from 'vue-router'
 import type { App } from 'vue'
 import Register from '@/views/login/LogIn/index.vue'
-// import { ChatLayout } from '@/views/chat/layout'
+// import {ChatLayout} from "@/views/chat/layout";
+import { ChatLayout } from '@/views/chat/layout'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -10,19 +11,19 @@ const routes: RouteRecordRaw[] = [
     name: 'Register',
     component: Register,
   },
-  // {
-  //   path: '/chat',
-  //   name: 'Root',
-  //   component: ChatLayout,
-  //   redirect: '/chat',
-  //   children: [
-  //     {
-  //       path: '/chat/:uuid?',
-  //       name: 'Chat',
-  //       component: () => import('@/views/chat/index.vue'),
-  //     },
-  //   ],
-  // },
+  {
+    path: '/chat',
+    name: 'Root',
+    component: ChatLayout,
+    redirect: '/chat',
+    children: [
+      {
+        path: '/chat/:uuid?',
+        name: 'Chat',
+        component: () => import('@/views/chat/index.vue'),
+      },
+    ],
+  },
 
   {
     path: '/403',

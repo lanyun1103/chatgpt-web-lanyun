@@ -3,8 +3,7 @@ import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import type { FormRules } from 'naive-ui'
 import { NAlert, NButton, NForm, NFormItem, NInput } from 'naive-ui'
-import type { LoginResModel } from '../../../../service/src/types'
-import { fetchLogin, fetchRegister } from '@/api'
+import { fetchRegister } from '@/api'
 
 const router = useRouter()
 
@@ -39,17 +38,18 @@ const registerRules: FormRules = {
   ],
 }
 const login = () => {
-  fetchLogin<LoginResModel>({
-    username: loginForm.value.username,
-    password: loginForm.value.password,
-  }).then((response) => {
-    alert('登录成功')
-    localStorage.setItem('token', response.data.token || '')
-    localStorage.setItem('pFlag', `${response.data.pFlag}`)
-    router.push('/chat')
-  }).catch((error) => {
-    alert(`登录失败：${error}`)
-  })
+  router.push('/chat')
+  // fetchLogin<LoginResModel>({
+  //   username: loginForm.value.username,
+  //   password: loginForm.value.password,
+  // }).then((response) => {
+  //   alert('登录成功')
+  //   localStorage.setItem('token', response.data.token || '')
+  //   localStorage.setItem('pFlag', `${response.data.pFlag}`)
+  //   router.push('/chat')
+  // }).catch((error) => {
+  //   alert(`登录失败：${error}`)
+  // })
 }
 
 const register = () => {
@@ -88,7 +88,7 @@ const register = () => {
           </NFormItem>
           <NFormItem>
             <NButton class="page-button" type="primary" style="margin-top: -50px" @click="login">
-              Login
+              不需要账号密码，点击即可
             </NButton>
           </NFormItem>
         </NForm>
