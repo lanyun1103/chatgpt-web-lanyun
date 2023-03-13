@@ -34,7 +34,7 @@ const prompt = ref<string>('')
 const loading = ref<boolean>(false)
 
 function handleSubmit() {
-  // onConversation()
+  onConversation()
 }
 
 async function onConversation() {

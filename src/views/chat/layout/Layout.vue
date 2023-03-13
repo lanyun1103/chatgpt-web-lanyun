@@ -27,9 +27,9 @@ const getMobileClass = computed(() => {
 onMounted(() => {
   alert('网站将在2023年3月14日00:00:00开始维护，几天后上线登录功能，有问题联系首页联系方式')
   // console.log(token)
-  // if (!token) {
-  // router.push('/')
-  // }
+  if (!token)
+    router.push('/')
+
   // else {
   //   fetchVerify<string>({
   //     token,

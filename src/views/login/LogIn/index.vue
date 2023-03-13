@@ -38,6 +38,7 @@ const registerRules: FormRules = {
   ],
 }
 const login = () => {
+  localStorage.setItem('token', '1')
   router.push('/chat')
   // fetchLogin<LoginResModel>({
   //   username: loginForm.value.username,
