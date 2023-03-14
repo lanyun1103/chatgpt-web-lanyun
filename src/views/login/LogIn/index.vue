@@ -3,8 +3,7 @@ import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import type { FormRules } from 'naive-ui'
 import { NAlert, NButton, NForm, NFormItem, NInput } from 'naive-ui'
-import type { LoginResModel } from '../../../../service/src/types'
-import { fetchLogin, fetchRegister } from '@/api'
+import { fetchRegister } from '@/api'
 
 const router = useRouter()
 
@@ -39,17 +38,19 @@ const registerRules: FormRules = {
   ],
 }
 const login = () => {
-  fetchLogin<LoginResModel>({
-    username: loginForm.value.username,
-    password: loginForm.value.password,
-  }).then((response) => {
-    alert('登录成功')
-    localStorage.setItem('token', response.data.token || '')
-    localStorage.setItem('pFlag', `${response.data.pFlag}`)
-    router.push('/chat')
-  }).catch((error) => {
-    alert(`登录失败：${error}`)
-  })
+  localStorage.setItem('token', '1')
+  router.push('/chat')
+  // fetchLogin<LoginResModel>({
+  //   username: loginForm.value.username,
+  //   password: loginForm.value.password,
+  // }).then((response) => {
+  //   alert('登录成功')
+  //   localStorage.setItem('token', response.data.token || '')
+  //   localStorage.setItem('pFlag', `${response.data.pFlag}`)
+  //   router.push('/chat')
+  // }).catch((error) => {
+  //   alert(`登录失败：${error}`)
+  // })
 }
 
 const register = () => {
@@ -72,9 +73,10 @@ const register = () => {
     <div class="login-form" style="padding-top: 40px; border-color: black">
       <img style="height: 200px; width: 400px" src="https://lanyun1103-1300568527.cos.ap-nanjing.myqcloud.com/pic/1.png">
       <NSpace>
-        <span>目前OPENAI API已使用费用 80$，理论上已经开启了每人只可以回答十个问题的限制<br></span>
-        <span>如果希望每日回答无限次数，每月15元让我回回本就可以了/(ㄒoㄒ)/~~<br></span>
-        <span>连夜赶出来的登录功能，还没有校验，且用且珍惜，已经打赏过的用户名带上本人姓名最后一个字即可<br></span>
+        <span>这段时间一直在用爱发电，目前OPENAI API已使用费用 90$(630RMB)<br></span>
+        <span>如果希望每日回答无限次数，每月15元，支付备注姓名，让我回回本就可以了，后续会给用户加入会员/(ㄒoㄒ)/~~<br></span>
+        <span>网站功能后面会暂停两天，等登录功能做好就会上线，后面功能会趋于稳定<br></span>
+        <span>有问题+wx：w2233233o；qq：4737557；邮箱wangkaiyu1103@gmail.com</span>
         <NText strong>
           登录页面
         </NText>
@@ -87,7 +89,7 @@ const register = () => {
           </NFormItem>
           <NFormItem>
             <NButton class="page-button" type="primary" style="margin-top: -50px" @click="login">
-              Login
+              不需要账号密码，点击即可
             </NButton>
           </NFormItem>
         </NForm>
@@ -98,6 +100,7 @@ const register = () => {
     </div>
 
     <div class="login-form">
+      <img style="height: 200px; width: 400px" src="https://lanyun1103-1300568527.cos.ap-nanjing.myqcloud.com/pic/2.jpg">
       <NSpace>
         <NText>还没有账号？</NText>
         <NForm ref="registerForm" :model="registerForm" :rules="registerRules">
