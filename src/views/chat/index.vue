@@ -29,7 +29,8 @@ const { uuid } = route.params as { uuid: string }
 const dataSources = computed(() => chatStore.getChatByUuid(+uuid))
 const conversationList = computed(() => dataSources.value.filter(item => (!item.inversion && !item.error)))
 const limit = 5
-const expireInMinutes = 60
+const timeKey = 'lastAccessTime'
+// const expireInMinutes = 60
 
 const prompt = ref<string>('')
 const loading = ref<boolean>(false)
@@ -66,18 +67,25 @@ function setCookie(name: string, value: string, expires: number) {
   document.cookie = cookie
 }
 
-setInterval(() => {
-  const now = new Date().getTime()
-  const lastClearTime = parseInt(localStorage.getItem('lastClearTime') || '', 10) || 0
-  if (now - lastClearTime >= expireInMinutes * 60 * 1000) {
-    localStorage.clear()
-    localStorage.setItem('lastClearTime', `${now}`)
-  }
-}, expireInMinutes * 60 * 1000)
-
 async function onConversation() {
   const userId = getUserId()
   let times = parseInt(localStorage.getItem(`times_${userId}`) || '', 10) || 0
+  const lastAccessTime = parseInt(localStorage.getItem(timeKey) || '', 10)
+  const currentTime = new Date().getTime()
+
+  // 如果上次访问时间不存在，则设置
+  if (!lastAccessTime)
+    localStorage.setItem(`${timeKey}`, `${currentTime}`)
+
+  // 更新访问次数
+  times++
+  localStorage.setItem(`times_${userId}`, `${times}`)
+
+  // 如果当前时间与上次访问时间不在同一小时内，则重置 times 为 1
+  if (!lastAccessTime || Math.floor(lastAccessTime / (0.1 * 60 * 1000)) !== Math.floor(currentTime / (0.1 * 60 * 1000))) {
+    localStorage.setItem(`times_${userId}`, '0')
+    localStorage.setItem(`${timeKey}`, `${currentTime}`)
+  }
 
   // 如果 times 超过限制，且未提示过，则提示用户
   if (times >= limit) {
@@ -85,16 +93,6 @@ async function onConversation() {
     return
   }
 
-  // 更新访问次数
-  times++
-  localStorage.setItem(`times_${userId}`, `${times}`)
-  // // console.log('handled')
-  // const lastAccessTime = parseInt(localStorage.getItem(timeKey) || '', 10)
-  // const currentTime = new Date().getTime()
-  //
-  // // 如果当前时间与上次访问时间不在同一小时内，则重置 times 为 1
-  // if (!lastAccessTime || Math.floor(lastAccessTime / (60 * 60 * 1000)) !== Math.floor(currentTime / (60 * 60 * 1000)))
-  //   times = 1
   // // console.log(times)
   // // 如果 times 超过限制，且未提示过，则提示用户
   // if (times >= limit) {
