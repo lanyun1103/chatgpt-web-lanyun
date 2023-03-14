@@ -28,7 +28,11 @@ const { uuid } = route.params as { uuid: string }
 
 const dataSources = computed(() => chatStore.getChatByUuid(+uuid))
 const conversationList = computed(() => dataSources.value.filter(item => (!item.inversion && !item.error)))
-let times = parseInt(localStorage.getItem('times') || '', 10) || 0
+// let times = parseInt(localStorage.getItem('times') || '', 10) || 0
+let times = 0
+const timeKey = 'lastAccessTime'
+const limit = 30
+const expireInMinutes = 60
 
 const prompt = ref<string>('')
 const loading = ref<boolean>(false)
@@ -37,17 +41,34 @@ function handleSubmit() {
   onConversation()
 }
 
+setInterval(() => {
+  const now = new Date().getTime()
+  const lastClearTime = parseInt(localStorage.getItem('lastClearTime') || '', 10) || 0
+  if (now - lastClearTime >= expireInMinutes * 60 * 1000) {
+    localStorage.clear()
+    localStorage.setItem('lastClearTime', `${now}`)
+  }
+}, expireInMinutes * 60 * 1000)
+
 async function onConversation() {
-  if (times >= 10 && localStorage.getItem('pFlag') !== '1') {
-    alert('由于当前运维成本过高，每人每天最多可提问 10 个问题，请等待后续会员服务')
+  // console.log('handled')
+  const lastAccessTime = parseInt(localStorage.getItem(timeKey) || '', 10)
+  const currentTime = new Date().getTime()
+
+  // 如果当前时间与上次访问时间不在同一小时内，则重置 times 为 1
+  if (!lastAccessTime || Math.floor(lastAccessTime / (60 * 60 * 1000)) !== Math.floor(currentTime / (60 * 60 * 1000)))
+    times = 1
+  // console.log(times)
+  // 如果 times 超过限制，且未提示过，则提示用户
+  if (times >= limit) {
+    alert('您使用太过频繁，为了缓解服务器压力，请过会再来，更多AI工具+咨询，请关注公众号【魔术铅笔】')
+    // localStorage.setItem('pFlag', '1')
     return
   }
 
-  // 将times值加1
+  // 更新访问时间和 times 值
+  localStorage.setItem(timeKey, `${currentTime}`)
   times++
-
-  // 将新的times值保存到localStorage中
-  localStorage.setItem('times', `${times}`)
   const message = prompt.value
 
   if (loading.value)
