@@ -28,10 +28,7 @@ const { uuid } = route.params as { uuid: string }
 
 const dataSources = computed(() => chatStore.getChatByUuid(+uuid))
 const conversationList = computed(() => dataSources.value.filter(item => (!item.inversion && !item.error)))
-// let times = parseInt(localStorage.getItem('times') || '', 10) || 0
-let times = 0
-const timeKey = 'lastAccessTime'
-const limit = 30
+const limit = 5
 const expireInMinutes = 60
 
 const prompt = ref<string>('')
@@ -39,6 +36,34 @@ const loading = ref<boolean>(false)
 
 function handleSubmit() {
   onConversation()
+}
+
+function getUserId() {
+  let userId = document.cookie.match(/userId=(\d+)/)?.[1]
+  if (!userId) {
+    // 生成一个新的用户 ID
+    userId = generateUserId()
+
+    // 添加名为 userId 的 cookie，值为生成的用户 ID，过期时间为 1 天
+    setCookie('userId', userId, 1)
+  }
+  return userId
+}
+
+function generateUserId() {
+  // 生成一个 8 位的随机数作为用户 ID
+  const random = Math.floor(Math.random() * 100000000)
+  return String(random).padStart(8, '0')
+}
+
+function setCookie(name: string, value: string, expires: number) {
+  let cookie = `${name}=${encodeURIComponent(value)}`
+  if (expires) {
+    const date = new Date()
+    date.setTime(date.getTime() + expires * 24 * 60 * 60 * 1000)
+    cookie += `;expires=${date.toUTCString()}`
+  }
+  document.cookie = cookie
 }
 
 setInterval(() => {
@@ -51,24 +76,37 @@ setInterval(() => {
 }, expireInMinutes * 60 * 1000)
 
 async function onConversation() {
-  // console.log('handled')
-  const lastAccessTime = parseInt(localStorage.getItem(timeKey) || '', 10)
-  const currentTime = new Date().getTime()
+  const userId = getUserId()
+  let times = parseInt(localStorage.getItem(`times_${userId}`) || '', 10) || 0
 
-  // 如果当前时间与上次访问时间不在同一小时内，则重置 times 为 1
-  if (!lastAccessTime || Math.floor(lastAccessTime / (60 * 60 * 1000)) !== Math.floor(currentTime / (60 * 60 * 1000)))
-    times = 1
-  // console.log(times)
   // 如果 times 超过限制，且未提示过，则提示用户
   if (times >= limit) {
     alert('您使用太过频繁，为了缓解服务器压力，请过会再来，更多AI工具+咨询，请关注公众号【魔术铅笔】')
-    // localStorage.setItem('pFlag', '1')
     return
   }
 
-  // 更新访问时间和 times 值
-  localStorage.setItem(timeKey, `${currentTime}`)
+  // 更新访问次数
   times++
+  localStorage.setItem(`times_${userId}`, `${times}`)
+  // // console.log('handled')
+  // const lastAccessTime = parseInt(localStorage.getItem(timeKey) || '', 10)
+  // const currentTime = new Date().getTime()
+  //
+  // // 如果当前时间与上次访问时间不在同一小时内，则重置 times 为 1
+  // if (!lastAccessTime || Math.floor(lastAccessTime / (60 * 60 * 1000)) !== Math.floor(currentTime / (60 * 60 * 1000)))
+  //   times = 1
+  // // console.log(times)
+  // // 如果 times 超过限制，且未提示过，则提示用户
+  // if (times >= limit) {
+  //   alert('您使用太过频繁，为了缓解服务器压力，请过会再来，更多AI工具+咨询，请关注公众号【魔术铅笔】')
+  //   // localStorage.setItem('pFlag', '1')
+  //   return
+  // }
+  //
+  // // 更新访问时间和 times 值
+  // localStorage.setItem(timeKey, `${currentTime}`)
+  // times++
+
   const message = prompt.value
 
   if (loading.value)
