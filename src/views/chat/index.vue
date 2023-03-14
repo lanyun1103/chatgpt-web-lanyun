@@ -82,7 +82,7 @@ async function onConversation() {
   localStorage.setItem(`times_${userId}`, `${times}`)
 
   // 如果当前时间与上次访问时间不在同一小时内，则重置 times 为 1
-  if (!lastAccessTime || Math.floor(lastAccessTime / (0.1 * 60 * 1000)) !== Math.floor(currentTime / (0.1 * 60 * 1000))) {
+  if (!lastAccessTime || Math.floor(lastAccessTime / (60 * 60 * 1000)) !== Math.floor(currentTime / (60 * 60 * 1000))) {
     localStorage.setItem(`times_${userId}`, '0')
     localStorage.setItem(`${timeKey}`, `${currentTime}`)
   }
