@@ -28,7 +28,7 @@ const { uuid } = route.params as { uuid: string }
 
 const dataSources = computed(() => chatStore.getChatByUuid(+uuid))
 const conversationList = computed(() => dataSources.value.filter(item => (!item.inversion && !item.error)))
-const limit = 5
+const limit = 40
 const timeKey = 'lastAccessTime'
 // const expireInMinutes = 60
 
