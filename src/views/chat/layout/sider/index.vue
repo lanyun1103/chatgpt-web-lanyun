@@ -76,7 +76,7 @@ watch(
           <List />
         </div>
       </main>
-      <a href="https://sm.ms/image/uNPUGjLVBrwqRpQ" target="_blank"><img src="https://s2.loli.net/2023/03/16/uNPUGjLVBrwqRpQ.png"></a>
+      <a target="_blank"><img src="https://s2.loli.net/2023/03/16/hS6aeczN9t5dQIZ.png"></a>
       <Footer />
     </div>
   </NLayoutSider>
