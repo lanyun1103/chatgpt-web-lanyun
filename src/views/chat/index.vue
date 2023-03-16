@@ -112,8 +112,6 @@ async function onConversation() {
 
   if (!message || message.trim() === '')
     return
-  global.console.log(message)
-  global.console.log(new Date())
   controller = new AbortController()
 
   addChat(
